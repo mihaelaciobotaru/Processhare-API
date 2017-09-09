@@ -7,12 +7,21 @@ class SortService
 {
     private $comparators = array();
 
+    /**
+     * @param ComparatorInterface $comparator
+     */
     public function addComparator(ComparatorInterface $comparator)
     {
         $this->comparators[] = $comparator;
     }
 
-    public function sort(array $numbers)
+    /**
+     * Sorts an array of numbers using a random comparator
+     *
+     * @param array $numbers
+     * @return array
+     */
+    public function sort(array $numbers) : array
     {
         $size = count($numbers);
 
@@ -32,6 +41,13 @@ class SortService
         return $numbers;
     }
 
+    /**
+     *
+     * Swaps two elements of an array
+     * @param $arr
+     * @param $a
+     * @param $b
+     */
     private function swap(&$arr, $a, $b)
     {
         $tmp = $arr[$a];
