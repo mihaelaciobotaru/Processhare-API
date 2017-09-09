@@ -1,6 +1,14 @@
+imports:
+        - { resource: consumers.yml }
+        - { resource: publishers.yml }
+        - { resource: comparators.yml}
+
 services:
     sorting:
         class: AppBundle\Service\SortService
+        calls:
+            - [addComparator, ['@comparator.greater_than']]
+            - [addComparator, ['@comparator.lesser_than']]
     rabbimq_provider:
         class: AppBundle\Service\Provider\RabbitProvider
         calls:

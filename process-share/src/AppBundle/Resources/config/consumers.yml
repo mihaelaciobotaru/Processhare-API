@@ -1,0 +1,5 @@
+services:
+    app.sorting_consumer:
+        class: AppBundle\Consumer\SortingConsumer
+        calls:
+            - [setSortService, ['@sorting']]

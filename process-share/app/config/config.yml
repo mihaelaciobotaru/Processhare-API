@@ -74,3 +74,27 @@ doctrine_cache:
     providers:
         memcached_cache:
             type: memcached
+
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host:     %amqp_default_host%
+            port:     %amqp_default_port%
+            user:     %amqp_default_user%
+            password: %amqp_default_password%
+            vhost:    %amqp_default_vhost%
+            lazy:     false
+            connection_timeout: 3
+            read_write_timeout: 3
+            keepalive: false
+            heartbeat: 0
+    producers:
+        sorting:
+            connection:       default
+            exchange_options: {name: 'sorting', type: fanout}
+    consumers:
+        sorting:
+            connection:       default
+            exchange_options: {name: 'sorting', type: fanout}
+            queue_options:    {name: 'sorting'}
+            callback:         app.sorting_consumer
