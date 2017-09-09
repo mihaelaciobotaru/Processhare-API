@@ -21,8 +21,6 @@ class SortingConsumer implements ConsumerInterface
         $this->sortService = $sortService;
     }
 
-
-
     public function execute(AMQPMessage $msg)
     {
         $numbers = json_decode($msg->getBody(), true);

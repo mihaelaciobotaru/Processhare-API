@@ -1,0 +1,6 @@
+services:
+    comparator.greater_than:
+        class: AppBundle\Comparator\GreaterThanComparator
+
+    comparator.lesser_than:
+        class: AppBundle\Comparator\LesserThanComparator
