@@ -1,0 +1,6 @@
+services:
+    sorting_publisher:
+        class: AppBundle\Publisher\Publisher
+        parent: old_sound_rabbit_mq.sorting_producer
+        calls:
+            - [setupFabric]
