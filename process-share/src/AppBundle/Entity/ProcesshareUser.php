@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * ProcesshareUser
  *
@@ -29,4 +31,62 @@ class ProcesshareUser
      * @ORM\Column(name="score", type="float")
      */
     private $score;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return ProcesshareUser
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set score
+     *
+     * @param float $score
+     *
+     * @return ProcesshareUser
+     */
+    public function setScore($score)
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * Get score
+     *
+     * @return float
+     */
+    public function getScore()
+    {
+        return $this->score;
+    }
 }
