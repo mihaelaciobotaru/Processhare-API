@@ -51,7 +51,7 @@ class ComparatorService
         $result = $this->cacheProvider->fetch($name);
         if (!$result) {
             $result = $this->comparatorRepository->findComparatorByName($name);
-            $this->cacheProvider->save($name, $result->getCode());
+            $this->cacheProvider->save($name, $result);
         }
 
         return $result->getCode();

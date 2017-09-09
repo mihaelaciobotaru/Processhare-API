@@ -75,15 +75,18 @@ class ApiController extends Controller
     }
 
     /**
-     * @Get("/api/function/{function_name}", name="get_function")
+     * @Get("/api/function/{functionName}", name="get_function")
      */
-    public function getComparatorAction(Request $request, string $functionName)
+    public function getComparatorAction(string $functionName)
     {
         /** @var ComparatorService $comparatorService */
         $comparatorService = $this->get('comparator_service');
 
         $code = $comparatorService->getComparator($functionName);
 
-        return $code;
+        return new Response(
+            $code,
+            $code ? Response::HTTP_OK : Response::HTTP_NOT_FOUND
+        );
     }
 }

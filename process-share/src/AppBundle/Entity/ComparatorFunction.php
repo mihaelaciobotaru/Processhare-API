@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ComparatorFunction
  *
- * @ORM\Table(name="comparator_function")
+ * @ORM\Table(name="comparators")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ComparatorFunctionRepository")
  */
 class ComparatorFunction
