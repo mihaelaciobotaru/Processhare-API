@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiController extends Controller
 {
     /**
-     * @Get("/api/message", name="homepage")
+     * @Get("/api/message", name="get_message")
      */
     public function indexAction()
     {
@@ -37,7 +37,7 @@ class ApiController extends Controller
     }
 
     /**
-     * @Post("/api/message/response", name="response message")
+     * @Post("/api/message/response", name="response")
      */
     public function postMessageResponse(Request $request)
     {
