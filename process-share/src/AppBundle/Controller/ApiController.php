@@ -29,7 +29,7 @@ class ApiController extends Controller
 
         return new JsonResponse(
             [
-                'type' => array_rand(['lesser_than' => 'lesser_than', 'greater_than' => 'greater_than'], 1),
+                'type' => array_rand(['less_than' => 'less_than', 'greater_than' => 'greater_than'], 1),
                 'data' => $message
             ],
             $message ? Response::HTTP_OK : Response::HTTP_NOT_FOUND
