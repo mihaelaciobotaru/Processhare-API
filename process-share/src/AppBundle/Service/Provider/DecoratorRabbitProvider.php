@@ -53,8 +53,9 @@ class DecoratorRabbitProvider implements ProviderInterface
         }
 
         array_push($keys, $key);
-        $this->cacheProvider->save("keys",$keys);
-        $this->cacheProvider->save($key, json_encode($message));
+        $this->cacheProvider->save("keys", $keys);
+        $this->cacheProvider->save($key . 'time', date('Y-m-d H:i:s'));
+        $this->cacheProvider->save($key . 'data', json_encode($message));
     }
 
     /**

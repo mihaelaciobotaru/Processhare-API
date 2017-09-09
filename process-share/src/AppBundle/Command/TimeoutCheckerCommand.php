@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Command;
 
+use AppBundle\Publisher\PublisherInterface;
 use Doctrine\Common\Cache\CacheProvider;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,6 +12,9 @@ class TimeoutCheckerCommand extends ContainerAwareCommand
     /** @var  CacheProvider $cacheProvider */
     private $cacheProvider;
 
+    /** @var  PublisherInterface $publisher */
+    private $publisher;
+
     /**
      * {@inheritdoc}
      */
@@ -20,22 +24,36 @@ class TimeoutCheckerCommand extends ContainerAwareCommand
             ->setDescription('Republish expired messages back to queue');
     }
 
-    public function setCacheProvider(CacheProvider $cacheProvider)
-    {
-        $this->cacheProvider = $cacheProvider;
-    }
-
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return bool
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $keys = $this->cacheProvider->fetch('keys');
+        $keys = $this->getContainer()->get('memcached')->fetch('keys');
+        if (!$keys) {
+            return true;
+        }
+
+        $deletedKeys = [];
         foreach ($keys as $key) {
-            $message = $this->cacheProvider->fetch($key);
-            if ($message['time'] < date('Y-m-d H:i:s', strtotime(date()) - 60*5)) {
+            $output->writeln($key);
+            $messageTime = $this->getContainer()->get('memcached')->fetch($key . 'time');
+            if ($messageTime > date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) - 60*5)) {
                 break;
             }
 
-            $this->cacheProvider->delete($key);
-            // republish
+            $deletedKeys[] = $key;
+            $output->writeln("Republish data to queue $key");
+            $this->getContainer()->get('sorting_publisher')->publish(
+                $this->getContainer()->get('memcached')->fetch($key . 'data')
+            );
+            $this->getContainer()->get('memcached')->delete($key . 'time');
+            $this->getContainer()->get('memcached')->delete($key . 'data');
         }
+        $this->getContainer()->get('memcached')->save('keys', array_diff($keys, $deletedKeys));
+
+        return true;
     }
 }

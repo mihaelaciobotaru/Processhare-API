@@ -2,7 +2,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\Type;
 
 /**
  * EmagUser
@@ -55,7 +54,6 @@ class EmagUser
      * @var \DateTime
      *
      * @ORM\Column(name="created", type="datetime")
-     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     private $created;
 

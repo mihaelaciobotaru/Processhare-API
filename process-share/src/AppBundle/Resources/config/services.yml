@@ -1,7 +1,7 @@
 imports:
         - { resource: consumers.yml }
         - { resource: publishers.yml }
-        - { resource: comparators.yml}
+        - { resource: comparators.yml }
 
 services:
     sorting:
