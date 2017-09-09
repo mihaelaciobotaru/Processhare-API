@@ -50,4 +50,21 @@ class ApiController extends Controller
             $emagUser ? Response::HTTP_OK : Response::HTTP_UNAUTHORIZED
         );
     }
+
+    /**
+     * @Post("/api/disconnect", name="disconnect")
+     */
+    public function disconnect(Request $request)
+    {
+        $repo = $this->getDoctrine()->getRepository('AppBundle:ProcesshareUser');
+        /** @var ProcesshareUser $user */
+        $user = $repo->findOneBy(['username' => $request->get('username')]);
+        $user->setScore($request->get('score'));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse(null, Response::HTTP_OK);
+    }
 }
