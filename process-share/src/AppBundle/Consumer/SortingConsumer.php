@@ -1,16 +1,37 @@
 <?php
 namespace AppBundle\Consumer;
 
-use \OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
-use \PhpAmqpLib\Message\AMQPMessage;
+
+use AppBundle\Service\SortService;
+use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class SortingConsumer implements ConsumerInterface
 {
     /**
-     * @inheritdoc
+     * @var SortService $sortService
      */
+    private $sortService;
+
+    /**
+     * @param mixed $sortService
+     */
+    public function setSortService(SortService $sortService)
+    {
+        $this->sortService = $sortService;
+    }
+
+
+
     public function execute(AMQPMessage $msg)
     {
-        // TODO: Implement execute() method.
+        $numbers = json_decode($msg->getBody(), true);
+
+        $ordered = $this->sortService->sort($numbers);
+
+        var_dump($ordered);
+
+        return ConsumerInterface::MSG_ACK;
     }
+
 }
