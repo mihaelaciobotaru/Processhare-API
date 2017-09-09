@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProcesshareUser
 {
+    const REWARD = 0.00000385;
+
     /**
      * @var int
      *
@@ -88,5 +90,15 @@ class ProcesshareUser
     public function getScore()
     {
         return $this->score;
+    }
+
+    public function getReward()
+    {
+        return $this->score * self::REWARD;
+    }
+
+    public function addScore()
+    {
+        $this->score++;
     }
 }

@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Adapter\ProcesshareUserApiAdapter;
 use AppBundle\Entity\ProcesshareUser;
 use AppBundle\Repository\ComparatorFunctionRepository;
 use AppBundle\Service\ComparatorService;
+use AppBundle\Repository\ProcesshareUserRepository;
 use AppBundle\Service\Provider\MessageProvider;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -26,7 +28,10 @@ class ApiController extends Controller
         $message = $providers->getMessage();
 
         return new JsonResponse(
-            $message,
+            [
+                'type' => array_rand(['lesser_than' => 'lesser_than', 'greater_than' => 'greater_than'], 1),
+                'data' => $message
+            ],
             $message ? Response::HTTP_OK : Response::HTTP_NOT_FOUND
         );
     }
@@ -36,20 +41,19 @@ class ApiController extends Controller
      */
     public function postMessageResponse(Request $request)
     {
-        return new JsonResponse(["user_id" => $request->get('user_id'), 'reward' => 0.01], Response::HTTP_OK);
-    }
+        /** @var ProcesshareUserRepository $repo */
+        $repo = $this->getDoctrine()->getRepository('AppBundle:ProcesshareUser');
+        /** @var ProcesshareUser $processhareUser */
+        $processhareUser = $repo->findOneBy(['username' => $request->get('user')]);
 
-    /**
-     * @Post("/api/login", name="login")
-     */
-    public function login(Request $request)
-    {
-        $repo = $this->getDoctrine()->getRepository('AppBundle:EmagUser');
-        $emagUser = $repo->findOneBy(['username' => $request->get('user')]);
+        $processhareUser->addScore();
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($processhareUser);
+        $em->flush();
 
         return new JsonResponse(
-            $emagUser,
-            $emagUser ? Response::HTTP_OK : Response::HTTP_UNAUTHORIZED
+            ProcesshareUserApiAdapter::adapt($processhareUser),
+            Response::HTTP_OK
         );
     }
 
