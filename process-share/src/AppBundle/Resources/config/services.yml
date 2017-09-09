@@ -1,3 +1,6 @@
+imports:
+        - { resource: consumers.yml }
+
 services:
     sorting:
         class: AppBundle\Service\SortService
