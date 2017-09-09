@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ProcesshareUser;
+use AppBundle\Repository\ComparatorFunctionRepository;
+use AppBundle\Service\ComparatorService;
 use AppBundle\Service\Provider\MessageProvider;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -66,5 +68,18 @@ class ApiController extends Controller
         $entityManager->flush();
 
         return new JsonResponse(null, Response::HTTP_OK);
+    }
+
+    /**
+     * @Get("/api/function/{function_name}", name="get_function")
+     */
+    public function getComparatorAction(Request $request, string $functionName)
+    {
+        /** @var ComparatorService $comparatorService */
+        $comparatorService = $this->get('comparator_service');
+
+        $code = $comparatorService->getComparator($functionName);
+
+        return $code;
     }
 }

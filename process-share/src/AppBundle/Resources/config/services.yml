@@ -25,3 +25,9 @@ services:
         arguments: ['@rabbimq_provider.decorator.inner']
         calls:
             - [setCacheProvider, ['@memcached']]
+
+    comparator_service:
+        class: AppBundle\Service\ComparatorService
+        calls:
+            - [setCacheProvider, ['@memcached']]
+            - [setComparatorRepository, ['@doctrine.orm.entity_manager']]
