@@ -1,3 +1,19 @@
 services:
     sorting:
         class: AppBundle\Service\SortService
+    rabbimq_provider:
+        class: AppBundle\Service\Provider\RabbitProvider
+        calls:
+            - [setConnection, ['%amqp_default_host%', '%amqp_default_port%', '%amqp_default_user%', '%amqp_default_password%', '%amqp_default_vhost%']]
+            - [setQueueName, ['%amqp_default_queue%']]
+    message_providers:
+        class: AppBundle\Service\Provider\MessageProvider
+        calls:
+            - [addProvider, ['@rabbimq_provider']]
+    rabbimq_provider.decorator:
+        class: AppBundle\Service\Provider\DecoratorRabbitProvider
+        public: false
+        decorates: rabbimq_provider
+        arguments: ['@rabbimq_provider.decorator.inner']
+        calls:
+            - [setCacheProvider, ['@memcached']]

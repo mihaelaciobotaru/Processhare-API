@@ -17,3 +17,10 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    amqp_default_host: rabbit1-dev
+    amqp_default_port: 5672
+    amqp_default_user: guest
+    amqp_default_password: guest
+    amqp_default_vhost: aaa-processshare
+    amqp_default_queue: sorting

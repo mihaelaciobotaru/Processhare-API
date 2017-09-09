@@ -67,3 +67,10 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+doctrine_cache:
+    aliases:
+        memcached: memcached_cache
+    providers:
+        memcached_cache:
+            type: memcached
