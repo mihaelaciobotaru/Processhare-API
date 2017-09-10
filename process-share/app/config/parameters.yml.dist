@@ -22,5 +22,5 @@ parameters:
     amqp_default_port: 5672
     amqp_default_user: guest
     amqp_default_password: guest
-    amqp_default_vhost: aaa-processshare
+    amqp_default_vhost: /
     amqp_default_queue: sorting
