@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stefan
- * Date: 10.09.2017
- * Time: 00:19
- */
 
 namespace AppBundle\Service;
-
 
 use AppBundle\Entity\ComparatorFunction;
 use AppBundle\Repository\ComparatorFunctionRepository;

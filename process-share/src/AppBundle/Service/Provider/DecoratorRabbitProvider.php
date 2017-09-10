@@ -49,13 +49,13 @@ class DecoratorRabbitProvider implements ProviderInterface
      */
     public function saveMessageToCache(string $key, array $message)
     {
-        $keys = $this->cacheProvider->fetch("keys");
+        $keys = $this->cacheProvider->fetch('keys');
         if (!is_array($keys)) {
             $keys = [];
         }
 
         array_push($keys, $key);
-        $this->cacheProvider->save("keys", $keys);
+        $this->cacheProvider->save('keys', $keys);
         $this->cacheProvider->save($key . 'time', date('Y-m-d H:i:s'));
         $this->cacheProvider->save($key . 'data', json_encode($message['data']));
     }

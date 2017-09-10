@@ -21,15 +21,14 @@ class SortingConsumer implements ConsumerInterface
         $this->sortService = $sortService;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function execute(AMQPMessage $msg)
     {
         $numbers = json_decode($msg->getBody(), true);
-
         $ordered = $this->sortService->sort($numbers);
-
-        var_dump($ordered);
 
         return ConsumerInterface::MSG_ACK;
     }
-
 }
