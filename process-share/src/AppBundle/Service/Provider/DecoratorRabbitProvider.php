@@ -3,6 +3,7 @@
 namespace AppBundle\Service\Provider;
 
 use AppBundle\Adapter\AMQPMessageAdapter;
+use AppBundle\Service\MessageRequestService;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\ORM\Cache\QueryCacheEntry;
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -11,15 +12,15 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class DecoratorRabbitProvider implements ProviderInterface
 {
-    /** @var RabbitProvider $rabbitProvider */
-    private $rabbitProvider;
+    /** @var RabbitProvider $provider */
+    private $provider;
 
     /** @var CacheProvider $cacheProvider */
     private $cacheProvider;
 
-    public function __construct(RabbitProvider $rabbitProvider)
+    public function __construct(ProviderInterface $provider)
     {
-        $this->rabbitProvider = $rabbitProvider;
+        $this->provider = $provider;
     }
 
     public function setCacheProvider(CacheProvider $cacheProvider)
@@ -32,9 +33,10 @@ class DecoratorRabbitProvider implements ProviderInterface
      */
     public function getMessage()
     {
-        $message = $this->rabbitProvider->getMessage();
+        $message = $this->provider->getMessage();
+
         if ($message) {
-            $key = self::computeMessageCacheKey($message);
+            $key = MessageRequestService::computeMessageCacheKey($message);
             $this->saveMessageToCache($key, $message);
         }
 
@@ -55,15 +57,6 @@ class DecoratorRabbitProvider implements ProviderInterface
         array_push($keys, $key);
         $this->cacheProvider->save("keys", $keys);
         $this->cacheProvider->save($key . 'time', date('Y-m-d H:i:s'));
-        $this->cacheProvider->save($key . 'data', json_encode($message));
-    }
-
-    /**
-     * @param array $message
-     * @return string
-     */
-    public static function computeMessageCacheKey(array $message)
-    {
-        return sha1((string) time() . json_encode($message));
+        $this->cacheProvider->save($key . 'data', json_encode($message['data']));
     }
 }

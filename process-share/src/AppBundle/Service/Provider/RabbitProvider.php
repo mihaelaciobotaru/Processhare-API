@@ -56,13 +56,11 @@ class RabbitProvider implements ProviderInterface
             return null;
         }
 
-        return AMQPMessageAdapter::decode(
-            AMQPMessageAdapter::adapt($message)
-        );
+        return AMQPMessageAdapter::adapt($message);
     }
 
     /**
-     * @return AMQPMessage
+     * @return mixed
      */
     private function getAMQPMessage()
     {

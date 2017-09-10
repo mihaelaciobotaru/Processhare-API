@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Adapter\MessageApiAdapter;
 use AppBundle\Adapter\ProcesshareUserApiAdapter;
 use AppBundle\Entity\ProcesshareUser;
 use AppBundle\Repository\ComparatorFunctionRepository;
@@ -28,10 +29,7 @@ class ApiController extends Controller
         $message = $providers->getMessage();
 
         return new JsonResponse(
-            [
-                'type' => array_rand(['less_than' => 'less_than', 'greater_than' => 'greater_than'], 1),
-                'data' => $message
-            ],
+            MessageApiAdapter::adapt($message),
             $message ? Response::HTTP_OK : Response::HTTP_NOT_FOUND
         );
     }
@@ -46,10 +44,15 @@ class ApiController extends Controller
         /** @var ProcesshareUser $processhareUser */
         $processhareUser = $repo->findOneBy(['username' => $request->get('user')]);
 
-        $processhareUser->addScore();
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($processhareUser);
-        $em->flush();
+        $requestId = $request->get('request_id');
+        if ($this->get('memcached')->fetch($requestId)) {
+            $this->get('memcached')->delete($requestId);
+
+            $processhareUser->addScore();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($processhareUser);
+            $em->flush();
+        }
 
         return new JsonResponse(
             ProcesshareUserApiAdapter::adapt($processhareUser),
