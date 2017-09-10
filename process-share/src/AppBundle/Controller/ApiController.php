@@ -64,7 +64,7 @@ class ApiController extends Controller
      * @Post("/api/disconnect", name="disconnect")
      * @deprecated 
      */
-    public function disconnect(Request $request)
+    public function postDisconnectAction(Request $request)
     {
         $repo = $this->getDoctrine()->getRepository('AppBundle:ProcesshareUser');
         /** @var ProcesshareUser $user */

@@ -3,7 +3,7 @@ namespace AppBundle\Adapter;
 
 use PhpAmqpLib\Message\AMQPMessage;
 
-class AMQPMessageAdapter implements IAdapter
+class AMQPMessageAdapter
 {
     const DATA_KEY = 'data';
     const TIME_KEY = 'timestamp';
