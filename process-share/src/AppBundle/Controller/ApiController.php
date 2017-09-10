@@ -22,7 +22,7 @@ class ApiController extends Controller
     /**
      * @Get("/api/message", name="get_message")
      */
-    public function indexAction()
+    public function getMessageAction()
     {
         /** @var MessageProvider $providers */
         $providers = $this->get('message_providers');
@@ -37,7 +37,7 @@ class ApiController extends Controller
     /**
      * @Post("/api/message/response", name="response")
      */
-    public function postMessageResponse(Request $request)
+    public function postResponseAction(Request $request)
     {
         /** @var ProcesshareUserRepository $repo */
         $repo = $this->getDoctrine()->getRepository('AppBundle:ProcesshareUser');
@@ -62,6 +62,7 @@ class ApiController extends Controller
 
     /**
      * @Post("/api/disconnect", name="disconnect")
+     * @deprecated 
      */
     public function disconnect(Request $request)
     {
