@@ -22,7 +22,7 @@ class SortingConsumerTest extends TestCase
         $sortService->expects($this->once())
             ->method('sort')
             ->will($this->returnValue(array(1, 2, 3, 4, 5, 6, 7, 8, 9)));
-        
+
         $consumer = new SortingConsumer();
         $consumer->setSortService($sortService);
         $this->assertEquals(ConsumerInterface::MSG_ACK, $consumer->execute($amqpMessage));
@@ -31,7 +31,7 @@ class SortingConsumerTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    public function getAmqpMessageMock()
+    private function getAmqpMessageMock()
     {
         $amqpMessage = $this->getMockBuilder('PhpAmqpLib\Message\AMQPMessage')
             ->disableOriginalConstructor()
@@ -43,7 +43,7 @@ class SortingConsumerTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    public function getSortServiceMock()
+    private function getSortServiceMock()
     {
         $sortService = $this->createMock('AppBundle\Service\SortService');
 
